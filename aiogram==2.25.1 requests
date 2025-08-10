@@ -12,3 +12,44 @@ async def send_welcome(message: types.Message):
 
 if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
+
+import os
+import zipfile
+
+# Бот кодын құру (минималды мысал үшін)
+files_content = {
+    "main.py": """\
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Aigabil Assistant Bot is running!"
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
+""",
+    "requirements.txt": "flask\n",
+    "Procfile": "web: python main.py\n",
+    "README.md": "# Aigabil Assistant Bot\nThis is the bot running in Webhook mode on Railway.\n"
+}
+
+# ZIP файлын сақтау жолы
+zip_path = "/mnt/data/aigabil_assistant_bot.zip"
+
+# Файлдарды уақытша папкаға жазу
+temp_dir = "/mnt/data/aigabil_assistant_bot"
+os.makedirs(temp_dir, exist_ok=True)
+
+for filename, content in files_content.items():
+    file_path = os.path.join(temp_dir, filename)
+    with open(file_path, "w") as f:
+        f.write(content)
+
+# ZIP-ке жинау
+with zipfile.ZipFile(zip_path, 'w') as zipf:
+    for filename in files_content.keys():
+        zipf.write(os.path.join(temp_dir, filename), filename)
+
+zip_path
