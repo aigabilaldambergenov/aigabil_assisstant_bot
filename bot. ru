@@ -1,0 +1,12 @@
+from aiogram import Dispatcher, types
+
+# Басты меню хэндлерлері
+async def cmd_start(message: types.Message):
+    await message.answer("Сәлем, Айгабыл! 👋 Мен сенің оң қолыңмын 🤝")
+
+async def cmd_help(message: types.Message):
+    await message.answer("Бұл бот сенің көмекшің. Барлық тапсырмаларыңды орындауға дайынмын ✅")
+
+def register_handlers(dp: Dispatcher):
+    dp.register_message_handler(cmd_start, commands=["start"])
+    dp.register_message_handler(cmd_help, commands=["help"])
